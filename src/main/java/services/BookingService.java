@@ -1,6 +1,7 @@
 package services;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import payloads.Booking;
@@ -58,11 +59,11 @@ public class BookingService {
     }
 
     public void setAuthToken(final String token){
-        requestSpec = requestSpec.auth().oauth2(token);
+        requestSpec = requestSpec.header("Authorization", "Bearer " + token);
     }
 
     public Response createBooking(Booking booking){
-        return given(requestSpec).body(booking).post();
+        return given(requestSpec).header("Content-Type", ContentType.JSON).body(booking).log().body().post();
     }
 
     public Response updateBooking(Booking booking, final String id){

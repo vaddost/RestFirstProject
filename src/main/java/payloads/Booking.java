@@ -3,6 +3,8 @@ package payloads;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.Objects;
+
 @JsonPropertyOrder({"firstName", "lasName", "totalPrice", "depositPaid", "bookingDates", "additionalNeeds"})
 public class Booking {
 
@@ -12,6 +14,15 @@ public class Booking {
     private boolean depositPaid;
     private String additionalNeeds;
     private BookingDates bookingDates;
+
+    public Booking(){
+        this.firstName = null;
+        this.lastName = null;
+        this.totalPrice = 0;
+        this.depositPaid = false;
+        this.additionalNeeds = null;
+        this.bookingDates = null;
+    }
 
     public Booking(String firstName, String lastName, int totalPrice, boolean depositPaid, String additionalNeeds, BookingDates bookingDates) {
         this.firstName = firstName;
@@ -78,13 +89,37 @@ public class Booking {
     }
 
     @JsonProperty("bookingdates")
-    public void setBookingDates(BookingDates bookingDates) {
-        this.bookingDates = bookingDates;
+    public void setBookingDates(String checkIn, String checkOut) {
+        this.bookingDates = new BookingDates(checkIn, checkOut);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Booking booking = (Booking) o;
+        return totalPrice == booking.totalPrice &&
+                depositPaid == booking.depositPaid &&
+                firstName.equals(booking.firstName) &&
+                lastName.equals(booking.lastName) &&
+                Objects.equals(additionalNeeds, booking.additionalNeeds) &&
+                bookingDates.checkIn.equals(booking.bookingDates.checkIn) &&
+                bookingDates.checkOut.equals(booking.bookingDates.checkOut);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, totalPrice, depositPaid, additionalNeeds, bookingDates);
     }
 
     class BookingDates {
         private String checkIn;
         private String checkOut;
+
+        public BookingDates(){
+            this.checkIn = null;
+            this.checkOut = null;
+        }
 
         public BookingDates(String checkIn, String checkOut) {
             this.checkIn = checkIn;
