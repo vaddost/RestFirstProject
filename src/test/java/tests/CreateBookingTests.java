@@ -1,17 +1,19 @@
 package tests;
 
 import io.restassured.http.ContentType;
-import org.junit.Test;
+
+import org.testng.annotations.Test;
 import payloads.Booking;
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
+
 
 public class CreateBookingTests extends BaseTests{
     @Test
     public void testCheckThatNewBookingIsCreated(){
         Booking booking = new Booking();
         booking.setFirstName("John");
-        booking.setLastName("Cohn");
+        //booking.setLastName("Cohn");
         booking.setTotalPrice(100);
         booking.setDepositPaid(true);
         booking.setBookingDates("2021-10-10", "2021-11-01");
@@ -30,6 +32,6 @@ public class CreateBookingTests extends BaseTests{
                 .statusCode(200)
                 .extract().as(Booking.class);
 
-        assertEquals(booking, createdBooking);
+        assertEquals(createdBooking, booking);
     }
 }

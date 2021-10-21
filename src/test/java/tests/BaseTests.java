@@ -1,6 +1,6 @@
 package tests;
 
-import org.junit.BeforeClass;
+import org.testng.annotations.BeforeClass;
 import services.AuthService;
 import services.BookingService;
 

@@ -1,11 +1,13 @@
 package payloads;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.Objects;
 
 @JsonPropertyOrder({"firstName", "lasName", "totalPrice", "depositPaid", "bookingDates", "additionalNeeds"})
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Booking {
 
     private String firstName;
@@ -15,6 +17,52 @@ public class Booking {
     private String additionalNeeds;
     private BookingDates bookingDates;
 
+    public static class BookingBuilder {
+        private String firstName;
+        private String lastName;
+        private int totalPrice;
+        private boolean depositPaid;
+        private String additionalNeeds;
+        private BookingDates bookingDates;
+
+        public BookingBuilder setFirstName(String firstName){
+            this.firstName = firstName;
+            return this;
+        }
+
+        public BookingBuilder setLastName(String lastName){
+            this.lastName = lastName;
+            return this;
+        }
+
+        public BookingBuilder setTotalPrice(int totalPrice){
+            this.totalPrice = totalPrice;
+            return this;
+        }
+
+        public BookingBuilder setDepositPaid(boolean depositPaid){
+            this.depositPaid = depositPaid;
+            return this;
+        }
+
+        public BookingBuilder setAdditionalNeeds(String additionalNeeds){
+            this.additionalNeeds = additionalNeeds;
+            return this;
+        }
+
+        public BookingBuilder setBookingDates(String checkIn, String checkOut){
+            this.bookingDates = new BookingDates.BookingDatesBuilder()
+                    .setCheckIn(checkIn)
+                    .setCheckOut(checkOut)
+                    .build();
+            return this;
+        }
+
+        public Booking build(){
+            return new Booking(this);
+        }
+    }
+
     public Booking(){
         this.firstName = null;
         this.lastName = null;
@@ -22,6 +70,15 @@ public class Booking {
         this.depositPaid = false;
         this.additionalNeeds = null;
         this.bookingDates = null;
+    }
+
+    public Booking(BookingBuilder bookingBuilder){
+        this.firstName = bookingBuilder.firstName;
+        this.lastName = bookingBuilder.lastName;
+        this.totalPrice = bookingBuilder.totalPrice;
+        this.depositPaid = bookingBuilder.depositPaid;
+        this.additionalNeeds = bookingBuilder.additionalNeeds;
+        this.bookingDates = bookingBuilder.bookingDates;
     }
 
     public Booking(String firstName, String lastName, int totalPrice, boolean depositPaid, String additionalNeeds, BookingDates bookingDates) {
@@ -103,47 +160,11 @@ public class Booking {
                 firstName.equals(booking.firstName) &&
                 lastName.equals(booking.lastName) &&
                 Objects.equals(additionalNeeds, booking.additionalNeeds) &&
-                bookingDates.checkIn.equals(booking.bookingDates.checkIn) &&
-                bookingDates.checkOut.equals(booking.bookingDates.checkOut);
+                bookingDates.equals(booking.bookingDates);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName, totalPrice, depositPaid, additionalNeeds, bookingDates);
-    }
-
-    class BookingDates {
-        private String checkIn;
-        private String checkOut;
-
-        public BookingDates(){
-            this.checkIn = null;
-            this.checkOut = null;
-        }
-
-        public BookingDates(String checkIn, String checkOut) {
-            this.checkIn = checkIn;
-            this.checkOut = checkOut;
-        }
-
-        @JsonProperty("checkin")
-        public String getCheckIn() {
-            return checkIn;
-        }
-
-        @JsonProperty("checkin")
-        public void setCheckIn(String checkIn) {
-            this.checkIn = checkIn;
-        }
-
-        @JsonProperty("checkout")
-        public String getCheckOut() {
-            return checkOut;
-        }
-
-        @JsonProperty("checkout")
-        public void setCheckOut(String checkOut) {
-            this.checkOut = checkOut;
-        }
     }
 }

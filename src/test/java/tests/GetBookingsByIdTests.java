@@ -1,12 +1,8 @@
 package tests;
 
-import org.junit.Test;
-import payloads.Booking;
+import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.responseSpecification;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertTrue;
 
 public class GetBookingsByIdTests extends BaseTests{
 

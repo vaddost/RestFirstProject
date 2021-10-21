@@ -1,15 +1,13 @@
 package tests;
 
-import org.junit.Test;
-import payloads.Booking;
+import org.testng.annotations.Test;
 import responses.BookingId;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-import static org.hamcrest.Matchers.hasItems;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class GetAllBookingsTests extends BaseTests{
 
@@ -22,7 +20,7 @@ public class GetAllBookingsTests extends BaseTests{
         long count = Arrays.stream(bookingIds)
                 .filter(Objects::isNull)
                 .count();
-        assertEquals(0, count);
+        assertEquals(count, 0);
     }
 
     @Test
